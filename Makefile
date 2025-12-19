@@ -43,8 +43,8 @@ SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
 APP_TITLE   :=  Reset Parental Controls
-APP_AUTHOR  :=  TotalJustice & MasaGratoR
-APP_VERSION :=  1.1.1-borealis
+APP_AUTHOR  :=  TotalJustice & MasaGratoR & nangongjing1
+APP_VERSION :=  1.2.0
 ROMFS		:=	romfs
 
 ROMFS				:=	res/

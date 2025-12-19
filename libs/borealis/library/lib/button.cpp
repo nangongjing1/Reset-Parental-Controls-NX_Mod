@@ -28,7 +28,7 @@ namespace brls
 Button::Button(ButtonStyle style)
     : style(style)
 {
-    this->registerAction("OK", Key::A, [this] { return this->onClick(); });
+    this->registerAction("确定", Key::A, [this] { return this->onClick(); });
 }
 
 LabelStyle Button::getLabelStyle()

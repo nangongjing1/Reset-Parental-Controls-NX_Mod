@@ -20,29 +20,41 @@ int main(int argc, char *argv[])
 {
 	// Init the app
 
-	if (!brls::Application::init("Reset Parental Controls"))
+	if (!brls::Application::init("重置家长控制"))
 	{
-		brls::Logger::error("Unable to init Reset Parental Controls");
+		brls::Logger::error("初始化重置家长控制失败");
 		return EXIT_FAILURE;
 	}
+
+	// 尝试加载中文字体
+#ifdef __SWITCH__
+	PlFontData font;
+	Result rc = plGetSharedFontByType(&font, PlSharedFontType_ChineseSimplified);
+	if (R_SUCCEEDED(rc))
+	{
+		brls::Logger::info("Adding Chinese simplified font");
+		int chineseFont = brls::Application::loadFontFromMemory("chinese", font.address, font.size, false);
+		nvgAddFallbackFontId(brls::Application::getNVGContext(), brls::Application::getFontStash()->regular, chineseFont);
+	}
+#endif
 
 	// Create a sample view
 	pctlInitialize();
 	brls::TabFrame* rootFrame = new brls::TabFrame();
-	rootFrame->setTitle("Reset Parental Controls");
+	rootFrame->setTitle("重置家长控制");
 	rootFrame->setIcon(BOREALIS_ASSET("icon.jpg"));
 	
 	brls::List* OptionsList = new brls::List();
 
-	brls::ListItem* RegisterPasscode = new brls::ListItem("Register parental control PIN");
+	brls::ListItem* RegisterPasscode = new brls::ListItem("设置家长控制 PIN");
 	RegisterPasscode->getClickEvent()->subscribe([](brls::View* view) {
 		pctlExit();
 		if (R_FAILED(pctlauthRegisterPasscode())) {
-			std::string notification = "Process canceled.";
+			std::string notification = "进程已取消.";
 			brls::Application::notify(notification);
 		}
 		else {
-			std::string notification = "PIN registered successfully!";
+			std::string notification = "PIN 设置成功!";
 			brls::Application::notify(notification);
 		}
 		pctlInitialize();
@@ -50,46 +62,46 @@ int main(int argc, char *argv[])
 	
 	OptionsList->addView(RegisterPasscode);
 	
-	brls::ListItem* DeleteParentalControls = new brls::ListItem("Delete parental controls");
+	brls::ListItem* DeleteParentalControls = new brls::ListItem("移除家长控制");
 	DeleteParentalControls->getClickEvent()->subscribe([](brls::View* view) {
 		bool isRestricted = false;
 		pctlIsRestrictionEnabled(&isRestricted);
 		if (isRestricted == true) {
 			if (R_FAILED(pctlDeleteParentalControls())) {
-				std::string notification = "Process canceled.";
+				std::string notification = "进程已取消.";
 				brls::Application::notify(notification);
 			}
 			else {
-				std::string notification = "Parental controls removed successfully.";
+				std::string notification = "成功移除家长控制.";
 				brls::Application::notify(notification);
 			}
 		}
 		else {
-		 std::string notification = "Parental controls are already disabled.";
+		 std::string notification = "家长控制已被禁用.";
 		 brls::Application::notify(notification);
 		}
 	});
 	
 	OptionsList->addView(DeleteParentalControls);
 	
-	brls::ListItem* DeletePairing = new brls::ListItem("Delete parental control app pairing");
+	brls::ListItem* DeletePairing = new brls::ListItem("移除家长控制 App 配对");
 	DeletePairing->getClickEvent()->subscribe([](brls::View* view) {
 		Result rc = pctlDeletePairing();
 		if (R_FAILED(rc)) {
-			std::string notification = "Process canceled.";
+			std::string notification = "进程已取消.";
 			brls::Application::notify(notification);
 		}
 		else {
-			std::string notification = "Parental control app pairing was deleted successfully.";
+			std::string notification = "成功移除家长控制 App 配对.";
 			brls::Application::notify(notification);
 		}
 	});
 	
 	OptionsList->addView(DeletePairing);
 	
-	rootFrame->addTab("Options", OptionsList);
+	rootFrame->addTab("主要选项", OptionsList);
 	
-	rootFrame->addTab("About", new AboutTab());
+	rootFrame->addTab("关于软件", new AboutTab());
 
 
 	// Add the root view to the stack
