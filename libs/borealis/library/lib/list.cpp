@@ -122,7 +122,7 @@ ListItem::ListItem(std::string label, std::string description, std::string subLa
         this->descriptionView->setParent(this);
     }
 
-    this->registerAction("OK", Key::A, [this] { return this->onClick(); });
+    this->registerAction("确定", Key::A, [this] { return this->onClick(); });
 }
 
 void ListItem::setThumbnail(Image* image)

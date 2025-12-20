@@ -1,7 +1,7 @@
 #include "about_tab.hpp"
 
-AboutTab::AboutTab() {		
-	brls::Label* Label1 = new brls::Label(brls::LabelStyle::REGULAR, "重置家长控制", false);
+AboutTab::AboutTab() {
+	brls::Label* Label1 = new brls::Label(brls::LabelStyle::REGULAR, "重置家长控制 1.2.0", false);
 	this->addView(Label1);
 
 	brls::Label* Label2 = new brls::Label(brls::LabelStyle::MEDIUM, "研发: TotalJustice\nBorealis UI 重制: MasaGratoR\n中文翻译: 南宫镜", true);
